@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Iniciar sesión con Facebook</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+  <h2>🔵 Iniciar sesión con Facebook</h2>
+  <button onclick="loginWithFacebook()">Iniciar sesión</button>
+
+  <!-- SDK de Facebook -->
+  <div id="fb-root"></div>
+  <script>
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '684894417631804',   // 👈 Tu App ID real
+        cookie     : true,
+        xfbml      : true,
+        version    : 'v22.0'              // 👈 Última versión estable del SDK
+      });
+
+      FB.AppEvents.logPageView();
+    };
+
+    // Cargar el SDK de Facebook
+    (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement(s); js.id = id;
+       js.src = "https://connect.facebook.net/en_US/sdk.js";
+       fjs.parentNode.insertBefore(js, fjs);
+     }(document, 'script', 'facebook-jssdk'));
+
+    // Función para iniciar sesión
+    function loginWithFacebook() {
+      FB.login(function(response) {
+        if (response.authResponse) {
+          FB.api('/me', { fields: 'name,email' }, function(userInfo) {
+            alert(`Bienvenido, ${userInfo.name}. Tu correo es: ${userInfo.email}`);
+          });
+        } else {
+          alert('Inicio de sesión cancelado o no autorizado.');
+        }
+      }, { scope: 'public_profile,email' });
+    }
+  </script>
+
+</body>
+</html>
